@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
+import Chatbar from './Chatbar.jsx';
+import Message from './Message.jsx';
 
 class App extends Component {
   render() {
-    return (
-      <h1>Hello React :)</h1>
-    );
+    return ( <div><nav className="navbar">
+        <a href="/" className="navbar-brand">Chatty</a>
+      </nav>
+      <Message/>
+      <Chatbar/>
+      </div>
+      );
+
   }
 }
 export default App;
