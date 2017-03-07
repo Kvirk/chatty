@@ -16,7 +16,7 @@ class Message extends Component {
 }
 
 Message.defaultProps = {
-    "username": "No Name",
+    "name": "No Name",
     "content": "No Content"
   };
 export default Message;
