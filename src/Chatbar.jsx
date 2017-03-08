@@ -16,6 +16,4 @@ class Chatbar extends Component {
   }
 }
 
-Chatbar.defaultProps = {name: 'Anonymous1'};
-
 export default Chatbar;

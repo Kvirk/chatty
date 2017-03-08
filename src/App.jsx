@@ -15,16 +15,17 @@ class App extends Component {
       this.setState({messages: messages})
     }
 
-    this.state = {currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-                  messages: [] };
+    this.state = {currentUser: {name: "Guest"}, messages: [] };
     this.submit = this.submit.bind(this);
     this.submitName = this.submitName.bind(this);
   }
 
   submitName(key) {
     if(key.charCode === 13){
-      this.setState({currentUser: {name: key.target.value}});
-      key.target.value = '';
+      if(key.target.value !== ''){
+        this.setState({currentUser: {name: key.target.value}});
+        key.target.value = '';
+      }
     }
   }
 
