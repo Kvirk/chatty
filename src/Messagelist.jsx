@@ -5,16 +5,18 @@ import Message from './Message.jsx';
 class Messagelist extends Component {
   render() {
     console.log("Rendering <Messagelist/>");
-    let message = [];
-    for(let i = 0; i < this.props.messages.length; i++){
-      message.push(<Message key={i} className={this.props.messages[i].className}
-        username={this.props.messages[i].username} content={this.props.messages[i].content}/>)
-    }
     return (
         <main className="messages">
-          {message}
+          {this.props.messages.map((x, i) => {
+            return <Message key={x.id} className={x.className} username={x.username} content={x.content}/>;
+          })}
         </main>
     );
+    this.props.messages.map((x) => {
+      return <Message key={i} className={x.className}
+        username={x.username} content={x.content}/>
+    })
+
   }
 }
 

@@ -2,24 +2,21 @@ import React, {Component} from 'react';
 import Chatbar from './Chatbar.jsx';
 import Messagelist from './Messagelist.jsx';
 
+
 var chars;
 
 class App extends Component {
-
   constructor(props) {
     super(props);
+    this.webSocket =  new WebSocket("ws://localhost:4000");
+    this.webSocket.onmessage = (event) => {
+      var message = JSON.parse(event.data);
+      const messages = this.state.messages.concat(message);
+      this.setState({messages: messages})
+    }
+
     this.state = {currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-                  messages: [
-                    {
-                      username: "Bob",
-                      content: "Has anyone seen my marbles?",
-                    },
-                    {
-                      username: "Anonymous",
-                      content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-                    }
-                  ]
-                };
+                  messages: [] };
     this.submit = this.submit.bind(this);
     this.submitName = this.submitName.bind(this);
   }
@@ -34,8 +31,7 @@ class App extends Component {
   submit(key) {
     if(key.charCode === 13){
       const newMessage = {username: this.state.currentUser.name, content: key.target.value};
-      const messages = this.state.messages.concat(newMessage);
-      this.setState({messages: messages})
+      this.webSocket.send(JSON.stringify(newMessage));
       key.target.value = '';
     }
   }
