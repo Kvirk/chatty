@@ -4,8 +4,6 @@ const express = require('express');
 const WebSocket = require('ws');
 const SocketServer = WebSocket.Server;
 const uuid = require('node-uuid');
-const buffer = "test";
-
 // Set the port to 4000
 const PORT = 4000;
 
@@ -17,6 +15,16 @@ const server = express()
 
 // Create the WebSockets server
 const wss = new SocketServer({ server });
+var users = 0;
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
@@ -24,16 +32,33 @@ const wss = new SocketServer({ server });
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  users++;
+  ws.send(JSON.stringify({type:"color", value: getRandomColor() }));
+  wss.clients.forEach(function each(client) {
+    client.send(JSON.stringify({type:"usersUpdate", value: users}));
+  });
   ws.on('message', function incoming(data, flags) {
     var message = JSON.parse(data);
     message["id"] =uuid.v4();
     wss.clients.forEach(function each(client) {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify(message));
+        switch(message.type){
+          case "postMessage":
+            client.send(JSON.stringify(message));
+            break;
+          case "username change":
+            client.send(JSON.stringify(message));
+            break;
+        }
       }
     });
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    users--;
+    wss.clients.forEach(function each(client) {
+      client.send(JSON.stringify({type:"usersUpdate", value: users}));
+    });
+    console.log('Client disconnected')});
 });
