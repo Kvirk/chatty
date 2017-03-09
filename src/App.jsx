@@ -8,8 +8,14 @@ var chars;
 class App extends Component {
   constructor(props) {
     super(props);
-    this.webSocket =  new WebSocket("ws://localhost:4000");
-    this.webSocket.onmessage = (event) => {
+    this.state = {currentUser: {name: "Guest"}, color: "#FFFFFF", numUsers: 0, messages: [] };
+    this.submit = this.submit.bind(this);
+    this.submitName = this.submitName.bind(this);
+  }
+
+  componentDidMount() {
+      this.webSocket =  new WebSocket("ws://localhost:4000");
+      this.webSocket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       const messages = this.state.messages.concat(message);
       switch(message.type) {
@@ -28,10 +34,6 @@ class App extends Component {
           break;
        }
     }
-
-    this.state = {currentUser: {name: "Guest"}, color: "#FFFFFF", numUsers: 0, messages: [] };
-    this.submit = this.submit.bind(this);
-    this.submitName = this.submitName.bind(this);
   }
 
   submitName(key) {
