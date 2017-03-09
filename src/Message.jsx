@@ -8,24 +8,16 @@ class Message extends Component {
     let urlReg = /(https?:\/\/[^\s]+(.jpg|.png))/g;
     let match = urlReg.exec(this.props.content);
     let content = this.props.content.replace(urlReg, "");
-    let url = "";
-    if (match !== null){
+    let url;
+    if (match){
       url = match[0];
-    }
-    if(url === ""){
-      return (
-          <div className="message">
-            <span style={style} className="message-username">{this.props.username}</span>
-            <span className="message-content">{content}</span>
-          </div>
-      );
     }
     return (
         <div className="message">
           <span style={style} className="message-username">{this.props.username}</span>
           <div className="img">
             <span className="message-content">{content}</span>
-            <img src={url}/>
+            {url ? <img src={url}/> : ""}
           </div>
         </div>
     );
