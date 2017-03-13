@@ -2,8 +2,9 @@
 
 const express = require('express');
 const WebSocket = require('ws');
-const SocketServer = WebSocket.Server;
 const uuid = require('node-uuid');
+
+const SocketServer = WebSocket.Server;
 // Set the port to 4000
 const PORT = 4000;
 
@@ -42,14 +43,7 @@ wss.on('connection', (ws) => {
     message["id"] =uuid.v4();
     wss.clients.forEach(function each(client) {
       if (client.readyState === WebSocket.OPEN) {
-        switch(message.type){
-          case "postMessage":
-            client.send(JSON.stringify(message));
-            break;
-          case "username change":
-            client.send(JSON.stringify(message));
-            break;
-        }
+        client.send(JSON.stringify(message));
       }
     });
   });

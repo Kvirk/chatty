@@ -3,14 +3,13 @@ import Chatbar from './Chatbar.jsx';
 import Messagelist from './Messagelist.jsx';
 
 
-var chars;
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {currentUser: {name: "Guest"}, color: "#FFFFFF", numUsers: 0, messages: [] };
-    this.submit = this.submit.bind(this);
-    this.submitName = this.submitName.bind(this);
+    this.sendName = this.sendName.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
+
   }
 
   componentDidMount() {
@@ -36,23 +35,16 @@ class App extends Component {
     }
   }
 
-  submitName(key) {
-    if(key.charCode === 13){
-      if(key.target.value !== ''){
-        const newMessage = {"type": "username change", content: `${this.state.currentUser.name} has changed their name to ${key.target.value}`};
-        this.webSocket.send(JSON.stringify(newMessage));
-        this.setState({currentUser: {name: key.target.value}});
-        key.target.value = '';
-      }
-    }
+  sendName(name) {
+    const newMessage = {"type": "username change", content: `${this.state.currentUser.name} has changed their name to ${name}`};
+    this.webSocket.send(JSON.stringify(newMessage));
+    this.setState({currentUser: {name: name}});
   }
 
-  submit(key) {
-    if(key.charCode === 13){
-      const newMessage = {"type": "postMessage", color: this.state.color, username: this.state.currentUser.name, content: key.target.value};
-      this.webSocket.send(JSON.stringify(newMessage));
-      key.target.value = '';
-    }
+  sendMessage(message) {
+    console.log(message);
+    const newMessage = {"type": "postMessage", color: this.state.color, username: this.state.currentUser.name, content: message};
+    this.webSocket.send(JSON.stringify(newMessage));
   }
 
   render() {
@@ -62,7 +54,7 @@ class App extends Component {
         <h4>{this.state.numUsers} users online</h4>
       </nav>
       <Messagelist messages={this.state.messages}/>
-      <Chatbar submit={this.submit} submitName={this.submitName} name = {this.state.currentUser.name}/>
+      <Chatbar sendName={this.sendName} sendMessage={this.sendMessage} name = {this.state.currentUser.name}/>
       </div>
       );
   }

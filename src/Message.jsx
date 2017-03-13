@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-
 class Message extends Component {
   render() {
     console.log("Rendering <Message/>");
@@ -23,10 +22,5 @@ class Message extends Component {
     );
   }
 }
-
-Message.defaultProps = {
-    "name": "No Name",
-    "content": "No Content"
-};
 
 export default Message;

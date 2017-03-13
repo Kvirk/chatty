@@ -29,16 +29,4 @@ class Messagelist extends Component {
   }
 }
 
-Messagelist.defaultProps = {
-  messages: [
-    {
-      username: "Bob",
-      content: "Test",
-    },
-    {
-      username: "Anonymous",
-      content: "Test"
-    }
-  ]
-}
 export default Messagelist;
